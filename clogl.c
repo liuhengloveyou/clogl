@@ -291,8 +291,8 @@ static int timeFile_open(cloglApd *apd)
 	if (!opt->fp) {
 		return -1;
 	}
-	// 打开时间
-	opt->now = time(NULL);
+
+	opt->now = time(NULL); // 打开时间
 	apd->isOpen = 1;
 
 	return 0;
@@ -561,12 +561,10 @@ static cloglApdT* cloglGetApd(const char *name)
 	if (!name || !name[0])
 		return NULL;
 
-	cloglApdT *tmpapdt = &cloglApdTypes[0];
-	while (tmpapdt) {
+	for (cloglApdT *tmpapdt = &cloglApdTypes[0]; tmpapdt->name; tmpapdt++) {
 		if (!strcmp(name, tmpapdt->name)) {
 			return tmpapdt;
 		}
-		tmpapdt ++;
 	}
 
 	return NULL;
@@ -578,7 +576,7 @@ static cloglApdT* cloglGetApd(const char *name)
 /*
   启动一个线程， 定时查看得日志输出方向的状态
  */
-static void *threadEvert(void *)
+static void *threadEvert(void *parm)
 {
 	useconds_t sleepTime = CLOGL_EVENT_TIME * 1000;
 
