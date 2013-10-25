@@ -578,6 +578,8 @@ static cloglApdT* cloglGetApd(const char *name)
  */
 static void *threadEvert(void *parm)
 {
+	parm = parm;
+	
 	useconds_t sleepTime = CLOGL_EVENT_TIME * 1000;
 
 	sleep(5); // 等一下业务线程

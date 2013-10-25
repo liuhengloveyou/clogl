@@ -1,40 +1,16 @@
 AR=ar
-CXX=g++
-CXXFLAGS=-O2 -Wall -Wextra  -fPIC 
-INCLUDE=-I. -I../../include
-LIBS= 
-
-incdir = ../../include
-libdir = ../../lib
+CC=gcc
+CFLAGS=-std=gnu99 -O2 -Wall -Wextra -fPIC
+INCLUDE=-I.
 
 incs = clogl.h
 libs = libclogl.a
+objs = ./clogl.o
 
-objs = ./var/clogl.o
-
-
-all: lib install
+all: lib
 
 clean:
-	rm -rf $(libs)
-	rm -rf ./var
-
-install: $(incs) $(libs)
-	mkdir -p $(incdir)
-	mkdir -p $(libdir)
-	cp $(incs) $(incdir)/
-	cp $(libs) $(libdir)/
-
-uninstall:
-	@for i in $(incs); do \
-		(echo "rm -f $(incdir)/$$i"); \
-		(rm -f $(incdir)/$$i); \
-	done
-	
-	@for l in $(libs); do \
-		(echo "rm -f $(libdir)/$$l"); \
-		(rm -f $(libdir)/$$l); \
-	done
+	rm -rf $(libs) $(objs)
 
 lib: $(libs)
 
@@ -42,7 +18,5 @@ lib: $(libs)
 $(libs): %: $(objs)
 	$(AR) -rs $@ $^
 
-$(objs): ./var/%.o: %.c %.h
-	mkdir -p var
-	$(CXX) $(CXXFLAGS) -c -o $@ $< $(INCLUDE)
-
+$(objs): %.o: %.c %.h
+	$(CC) $(CFLAGS) -c -o $@ $< $(INCLUDE)
